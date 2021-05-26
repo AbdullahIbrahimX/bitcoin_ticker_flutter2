@@ -1,11 +1,10 @@
 import 'dart:io' show Platform;
 
 import 'package:bitcoin_ticker_flutter2/services/constants.dart';
+import 'package:bitcoin_ticker_flutter2/services/kracken_ws.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
-import 'file:///C:/Users/abuar/AndroidStudioProjects/bitcoin_ticker_flutter2/test/TestWidget.dart';
 
 import 'coin_data.dart';
 
@@ -41,17 +40,13 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
 
   @override
   void initState() {
-    // getAppData();
+    connectToWsServer();
     super.initState();
   }
 
-  void getAppData() async {
-    var dummy;
-    coinData = CoinData();
-    dummy = await coinData.getCoinData(currency: selectedCurrency);
-    setState(() {
-      cryptoRates = dummy;
-    });
+  void connectToWsServer() async {
+    KrackenWS.subscribe(['BTC', 'LTC'], 'USD');
+    // KrackenWS.listen();
   }
 
   List<Widget> coinRateCards() {
@@ -142,7 +137,6 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
             color: Colors.lightBlue,
             child: Platform.isIOS ? iOSPicker() : androidDropdown(),
           ),
-          TestWidget(), //TODO delete me
         ],
       ),
     );
