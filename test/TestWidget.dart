@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'services/kracken_ws.dart';
+import '../lib/services/kracken_ws.dart';
 
 class TestWidget extends StatefulWidget {
   const TestWidget({Key key}) : super(key: key);
@@ -19,14 +19,23 @@ class _TestWidgetState extends State<TestWidget> {
   }
 
   connectToWebSocket() async {
-    KrackenWS.subscribe('crypto', 'currency');
+    KrackenWS.subscribe(['crypto'], 'currency');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      test,
-      style: TextStyle(color: Colors.black),
+    return Column(
+      children: [
+        Text(
+          test,
+          style: TextStyle(color: Colors.black),
+        ),
+        TextButton(
+            onPressed: () {
+              print('pressed');
+            },
+            child: Text('suncribe'))
+      ],
     );
   }
 }

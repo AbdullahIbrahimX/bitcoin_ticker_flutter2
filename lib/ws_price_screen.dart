@@ -5,14 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import 'file:///C:/Users/abuar/AndroidStudioProjects/bitcoin_ticker_flutter2/test/TestWidget.dart';
+
 import 'coin_data.dart';
 
-class PriceScreen extends StatefulWidget {
+class WSPriceScreen extends StatefulWidget {
   @override
-  _PriceScreenState createState() => _PriceScreenState();
+  _WSPriceScreenState createState() => _WSPriceScreenState();
 }
 
-class _PriceScreenState extends State<PriceScreen> {
+class _WSPriceScreenState extends State<WSPriceScreen> {
   List<Map<String, dynamic>> cryptoRates = [];
   String selectedCurrency = "USD";
   CoinData coinData = CoinData();
@@ -140,6 +142,7 @@ class _PriceScreenState extends State<PriceScreen> {
             color: Colors.lightBlue,
             child: Platform.isIOS ? iOSPicker() : androidDropdown(),
           ),
+          TestWidget(), //TODO delete me
         ],
       ),
     );

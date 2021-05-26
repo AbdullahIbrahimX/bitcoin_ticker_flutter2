@@ -1,32 +1,6 @@
 import 'package:bitcoin_ticker_flutter2/services/constants.dart';
 import 'package:bitcoin_ticker_flutter2/services/networking.dart';
 
-const List<String> currenciesList = [
-  'AUD',
-  'BRL',
-  'CAD',
-  'CNY',
-  'EUR',
-  'GBP',
-  'HKD',
-  'IDR',
-  'INR',
-  'JPY',
-  'MXN',
-  'NZD',
-  'PLN',
-  'RUB',
-  'USD',
-  'ZAR',
-];
-
-const List<String> cryptoList = [
-  'BTC',
-  'ETH',
-  'LTC',
-  'XRP',
-];
-
 class CoinData {
   List<dynamic> _rateList = [];
 
