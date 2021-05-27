@@ -18,7 +18,7 @@ class KrackenWS {
   static String _uri = 'wss://ws.kraken.com';
   static List<String> _crypto;
   static String _currency;
-  static List<String> pairs;
+  static List<String> _pairs = [];
   static IOWebSocketChannel _channel;
   static var _codec = new JsonCodec().fuse(new Utf8Codec());
 
@@ -28,25 +28,34 @@ class KrackenWS {
       print('no currency or crypto');
       return;
     }
-    _channel = IOWebSocketChannel.connect(Uri.parse(_uri));
+    _channel = IOWebSocketChannel.connect(Uri.parse(_uri),
+        pingInterval: Duration(seconds: 4));
     print('initialized');
   }
 
-  static Stream<dynamic> listen() {
+  static Stream<List> listen() async* {
     _initialize();
     _channel.stream.listen((event) {
-      var message = jsonDecode(event);
-      if (message.runtimeType == List) {
-        print('coin event :');
-        print(message);
-      } else {
-        if (message['status'] != null && message['status'] == 'online') {
-          List<int> subEvent =
-              _codec.encode({...KrakenEvents['subscribe'], 'pair': pairs});
-          _channel.sink.add(subEvent);
+      dynamic message = jsonDecode(event);
+      print(message);
+
+      if (message.isNotEmpty) {
+        if (message is List || message is List<dynamic>) {
+          print('list');
+          print(message);
+        } else {
+          print('Message type : ${message.runtimeType}');
+          if (message.containsKey('event')) {
+            print(message['event']);
+            if (message['event'] == 'systemStatus' &&
+                message['status'] == 'online') {
+              print('sub');
+              List<int> subEvent =
+                  _codec.encode({...KrakenEvents['subscribe'], 'pair': _pairs});
+              _channel.sink.add(subEvent);
+            }
+          }
         }
-        print('other event  : ${message.runtimeType}');
-        print(message);
       }
     });
   }
@@ -54,11 +63,10 @@ class KrackenWS {
   static subscribe(List<String> crypto, String currency) {
     _crypto = crypto;
     _currency = currency;
-    print(_crypto);
-    print(_currency);
 
-    pairs = _generatePairs();
-    print(pairs);
+    _crypto.forEach((element) {
+      _pairs.add('$element/$_currency');
+    });
   }
 
   static unsubscribe() {
@@ -79,6 +87,7 @@ class KrackenWS {
 
   static List<String> _generatePairs() {
     List<String> gen = [];
+
     return gen;
   }
 

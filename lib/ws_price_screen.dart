@@ -46,7 +46,7 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
 
   void connectToWsServer() async {
     KrackenWS.subscribe(['BTC', 'LTC'], 'USD');
-    // KrackenWS.listen();
+    KrackenWS.listen();
   }
 
   List<Widget> coinRateCards() {
