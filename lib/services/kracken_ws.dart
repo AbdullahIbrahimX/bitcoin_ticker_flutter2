@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:web_socket_channel/io.dart';
@@ -15,16 +16,18 @@ const Map<String, Map> KrakenEvents = {
 
 class KrackenWS {
   static IOWebSocketChannel _channel;
+  static Stream _stream;
   static String _uri = 'wss://ws.kraken.com';
   static List<String> _cryptoPairs = [];
   static var _codec = new JsonCodec().fuse(new Utf8Codec());
 
-  static subscribeToPairs(String currency, List<String> cryptoList) {
+  static subscribeToPairs(String currency, List<String> cryptoList) async {
     for (String crypto in cryptoList) {
       _cryptoPairs.add('$crypto/$currency');
     }
     _init();
-    _channel.stream.listen((event) {
+    //TODO add take(2);
+    _stream.listen((event) {
       dynamic message = jsonDecode(event);
 
       if (message != null &&
@@ -42,12 +45,24 @@ class KrackenWS {
     });
   }
 
+  static Stream listenToCoinPrices() {
+    Stream coinData =
+        _stream.where((event) => jsonDecode(event) is List<dynamic>);
+    return coinData;
+  }
+
+  static closeConnection() async {
+    _channel.sink.close();
+  }
+
   static _init() {
     if (_cryptoPairs.isEmpty) return;
     if (_channel != null) return;
 
     _channel = IOWebSocketChannel.connect(Uri.parse(_uri),
         pingInterval: Duration(seconds: 4));
+
+    _stream = _channel.stream.asBroadcastStream();
   }
 }
 //

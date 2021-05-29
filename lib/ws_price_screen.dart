@@ -1,10 +1,10 @@
 import 'dart:io' show Platform;
 
+import 'package:bitcoin_ticker_flutter2/services/coin_rate_cards.dart';
 import 'package:bitcoin_ticker_flutter2/services/constants.dart';
 import 'package:bitcoin_ticker_flutter2/services/kracken_ws.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'coin_data.dart';
 
@@ -17,26 +17,6 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
   List<Map<String, dynamic>> cryptoRates = [];
   String selectedCurrency = "USD";
   CoinData coinData = CoinData();
-  List<Widget> loadingScreen = [
-    Padding(
-      padding: EdgeInsets.only(top: 200.0),
-      child: Column(
-        children: [
-          SpinKitFadingGrid(
-            color: Colors.lightBlueAccent,
-            size: 50,
-          ),
-          SizedBox(
-            height: 15.0,
-          ),
-          Text(
-            "Loading Crypto Data...",
-            style: TextStyle(color: Colors.black),
-          )
-        ],
-      ),
-    ),
-  ];
 
   @override
   void initState() {
@@ -45,32 +25,7 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
   }
 
   void connectToWsServer() async {
-    KrackenWS.subscribeToPairs('USD', ['BTC', 'LTC']);
-  }
-
-  List<Widget> coinRateCards() {
-    List<Widget> cards = [];
-    cryptoRates.forEach((e) {
-      cards.add(Card(
-        color: Colors.lightBlueAccent,
-        elevation: 5.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-          child: Text(
-            '1 ${e["Crypto"]} = ${e["rate"]} $selectedCurrency',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20.0,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ));
-    });
-    return cards;
+    KrackenWS.subscribeToPairs(selectedCurrency, cryptoList);
   }
 
   DropdownButton<String> androidDropdown() {
@@ -84,11 +39,13 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
     });
 
     return DropdownButton<String>(
-      onChanged: (value) {
+      onChanged: (value) async {
         setState(() {
           selectedCurrency = value;
-          cryptoRates = coinData.getAllCryptoRates(currency: selectedCurrency);
         });
+        await KrackenWS.closeConnection();
+        connectToWsServer();
+        KrackenWS.listenToCoinPrices();
       },
       value: selectedCurrency,
       items: currencyList,
@@ -124,7 +81,8 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
               padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: cryptoRates.isEmpty ? loadingScreen : coinRateCards(),
+                children: [CoinRateCards()],
+                // children: cryptoRates.isEmpty ? loadingScreen : coinRateCards(),
                 // children: loadingScreen,
               ),
             ),

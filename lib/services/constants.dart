@@ -19,7 +19,7 @@ const List<String> currenciesList = [
 ];
 
 const List<String> cryptoList = [
-  'BTC',
+  'XBT',
   'ETH',
   'LTC',
   'XRP',
