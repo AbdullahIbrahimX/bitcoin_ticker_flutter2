@@ -21,12 +21,10 @@ class KrackenWS {
   static List<String> _cryptoPairs = [];
   static var _codec = new JsonCodec().fuse(new Utf8Codec());
 
-  static subscribeToPairs(String currency, List<String> cryptoList) async {
-    for (String crypto in cryptoList) {
-      _cryptoPairs.add('$crypto/$currency');
-    }
+  static subscribeToPairs(String currency, List<String> cryptoList) {
     _init();
     //TODO add take(2);
+
     _stream.listen((event) {
       dynamic message = jsonDecode(event);
 
@@ -35,14 +33,27 @@ class KrackenWS {
           message.containsKey('event')) {
         if (message['event'] == 'systemStatus' &&
             message['status'] == 'online') {
-          List<int> subEvent = _codec
-              .encode({...KrakenEvents['subscribe'], 'pair': _cryptoPairs});
-          _channel.sink.add(subEvent);
-          return;
+          subscribeAll(currency, cryptoList);
         }
       }
       print(message);
     });
+  }
+
+  static subscribeAll(String currency, List<String> cryptoList) {
+    for (String crypto in cryptoList) {
+      _cryptoPairs.add('$crypto/$currency');
+    }
+    List<int> subEvent =
+        _codec.encode({...KrakenEvents['subscribe'], 'pair': _cryptoPairs});
+    _channel.sink.add(subEvent);
+  }
+
+  static unsubscribeAll() {
+    List<int> unsubEvent =
+        _codec.encode({...KrakenEvents['unsubscribe'], 'pair': _cryptoPairs});
+    _channel.sink.add(unsubEvent);
+    _cryptoPairs = [];
   }
 
   static Stream listenToCoinPrices() {
@@ -56,7 +67,6 @@ class KrackenWS {
   }
 
   static _init() {
-    if (_cryptoPairs.isEmpty) return;
     if (_channel != null) return;
 
     _channel = IOWebSocketChannel.connect(Uri.parse(_uri),

@@ -6,17 +6,13 @@ import 'package:bitcoin_ticker_flutter2/services/kracken_ws.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'coin_data.dart';
-
 class WSPriceScreen extends StatefulWidget {
   @override
   _WSPriceScreenState createState() => _WSPriceScreenState();
 }
 
 class _WSPriceScreenState extends State<WSPriceScreen> {
-  List<Map<String, dynamic>> cryptoRates = [];
   String selectedCurrency = "USD";
-  CoinData coinData = CoinData();
 
   @override
   void initState() {
@@ -43,9 +39,8 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
         setState(() {
           selectedCurrency = value;
         });
-        await KrackenWS.closeConnection();
-        connectToWsServer();
-        KrackenWS.listenToCoinPrices();
+        KrackenWS.unsubscribeAll();
+        KrackenWS.subscribeAll(selectedCurrency, cryptoList);
       },
       value: selectedCurrency,
       items: currencyList,
