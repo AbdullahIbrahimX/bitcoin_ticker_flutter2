@@ -20,7 +20,7 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
     super.initState();
   }
 
-  void connectToWsServer() async {
+  void connectToWsServer() {
     KrackenWS.subscribeToPairs(selectedCurrency, cryptoList);
   }
 
