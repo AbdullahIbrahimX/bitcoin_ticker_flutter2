@@ -16,13 +16,21 @@ class CoinRateCards extends StatefulWidget {
 
 class _CoinRateCardsState extends State<CoinRateCards> {
   Map<String, List> _coinPrices = {};
-  List<Widget> widgetList = [];
 
   @override
   void initState() {
     for (String crypto in cryptoList) {
       _coinPrices.addAll({
-        crypto: [0, 0, 0, 'loading']
+        crypto: [
+          '0',
+          '0',
+          ' 0',
+          'loading',
+          '0',
+          '0',
+          Colors.black,
+          Colors.black
+        ]
       });
     }
     super.initState();
@@ -50,20 +58,35 @@ class _CoinRateCardsState extends State<CoinRateCards> {
           if (coinPayload == null) {
             return LoadingScreen();
           }
+          List<Widget> widgetList = [];
           Map<String, dynamic> coinData = coinPayload[1];
           String closePrice = coinData['c'][0];
           String closeVolume = coinData['c'][1];
           String openPrice = coinData['o'][0];
           String pairName = coinPayload.last.toString();
           String cryptoName = pairName.split('/')[0];
+          double closePriceDouble = double.parse(closePrice);
+          double prevClosePriceDouble =
+              double.parse(_coinPrices[cryptoName][0]);
+          double openPriceDouble = double.parse(openPrice);
 
-          print('CLOSE PRICE: $closePrice');
-          print('CLOSE VOLUME: $closeVolume');
-          print('OPEN PRICE: $openPrice');
-          print('CRYPTO NAME: $cryptoName');
+          double changeAmount = closePriceDouble - prevClosePriceDouble;
+          double OAchangePercentage =
+              (100 * ((closePriceDouble - openPriceDouble) / openPriceDouble));
 
-          _coinPrices.update(cryptoName,
-              (value) => [closePrice, closeVolume, openPrice, pairName]);
+          _coinPrices.update(
+              cryptoName,
+              (value) => [
+                    closePrice,
+                    closeVolume,
+                    openPrice,
+                    pairName,
+                    changeAmount.toStringAsFixed(5),
+                    OAchangePercentage.toStringAsFixed(2),
+                    compare(closePrice, _coinPrices[cryptoName][0]),
+                    compare(OAchangePercentage.toString(),
+                        _coinPrices[cryptoName][0])
+                  ]);
 
           widgetList.clear();
           _coinPrices.forEach((key, value) {
@@ -72,10 +95,10 @@ class _CoinRateCardsState extends State<CoinRateCards> {
                 pairName: value[3],
                 pairPrice: value[0],
                 volume: value[1].toString(),
-                changeAmount: '0',
-                infoTextColor: Colors.black,
-                OAchangePercentage: '2%',
-                OAbackGroundColor: Colors.black,
+                changeAmount: value[4],
+                infoTextColor: value[6],
+                OAchangePercentage: '${value[5]}%',
+                OAbackGroundColor: value[7],
               ),
             );
           });
