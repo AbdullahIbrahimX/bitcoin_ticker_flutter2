@@ -6,7 +6,7 @@ import 'package:web_socket_channel/io.dart';
 const Map<String, Map> KrakenEvents = {
   'subscribe': {
     "event": "subscribe",
-    "subscription": {"name": "ticker"}
+    "subscription": {"name": "trade"}
   },
   'unsubscribe': {
     "event": "unsubscribe",
