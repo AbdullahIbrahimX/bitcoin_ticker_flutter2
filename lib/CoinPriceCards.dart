@@ -1,55 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Test extends StatelessWidget {
-  const Test({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CoinCard2(
-          pairName: 'XBT/USD',
-          pairPrice: '39459.2466',
-          volume: '0.15673',
-          changeAmount: '+4000',
-          infoTextColor: Colors.greenAccent,
-          OAchangePercentage: '19%',
-          OAbackGroundColor: Colors.redAccent,
-        ),
-        CoinCard2(
-          pairName: 'ETH/USD',
-          pairPrice: '2459.2466',
-          volume: '0.15673',
-          changeAmount: '-4000',
-          infoTextColor: Colors.redAccent,
-          OAchangePercentage: '10.24%',
-          OAbackGroundColor: Colors.greenAccent,
-        ),
-        CoinCard2(
-          pairName: 'XBT/USD',
-          pairPrice: '39459.2466',
-          volume: '0.15673',
-          changeAmount: '+4000',
-          infoTextColor: Colors.lightGreenAccent,
-          OAchangePercentage: '19%',
-          OAbackGroundColor: Colors.redAccent,
-        ),
-        CoinCard2(
-          pairName: 'XBT/USD',
-          pairPrice: '39459.2466',
-          volume: '0.15673',
-          changeAmount: '+4000',
-          infoTextColor: Colors.lightGreenAccent,
-          OAchangePercentage: '19%',
-          OAbackGroundColor: Colors.redAccent,
-        ),
-      ],
-    );
-  }
-}
-
-class CoinCard2 extends StatelessWidget {
+class CoinCard extends StatelessWidget {
   final String pairName;
   final String pairPrice;
   final String volume;
@@ -59,7 +11,7 @@ class CoinCard2 extends StatelessWidget {
   final String OAchangePercentage;
   final Color OAbackGroundColor;
 
-  CoinCard2(
+  CoinCard(
       {this.pairName,
       this.pairPrice,
       this.volume,

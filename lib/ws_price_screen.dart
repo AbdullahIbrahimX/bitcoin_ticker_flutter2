@@ -1,6 +1,6 @@
 import 'dart:io' show Platform;
 
-import 'package:bitcoin_ticker_flutter2/CoinPriceCards.dart';
+import 'package:bitcoin_ticker_flutter2/services/coin_rate_cards.dart';
 import 'package:bitcoin_ticker_flutter2/services/constants.dart';
 import 'package:bitcoin_ticker_flutter2/services/kracken_ws.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +16,7 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
 
   @override
   void initState() {
-    // connectToWsServer();
+    connectToWsServer();
     super.initState();
   }
 
@@ -76,7 +76,9 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
               padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [Test()], //TODO replace me
+                children: [
+                  CoinRateCards(),
+                ],
                 // children: cryptoRates.isEmpty ? loadingScreen : coinRateCards(),
                 // children: loadingScreen,
               ),
