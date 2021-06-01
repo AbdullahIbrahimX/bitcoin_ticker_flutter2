@@ -9,7 +9,6 @@ import 'constants.dart';
 
 class CoinRateCards extends StatefulWidget {
   const CoinRateCards({Key key}) : super(key: key);
-
   @override
   _CoinRateCardsState createState() => _CoinRateCardsState();
 }
@@ -19,20 +18,6 @@ class _CoinRateCardsState extends State<CoinRateCards> {
 
   @override
   void initState() {
-    for (String crypto in cryptoList) {
-      _coinPrices.addAll({
-        crypto: [
-          '0',
-          '0',
-          ' 0',
-          'loading',
-          '0',
-          '0',
-          Colors.black,
-          Colors.black
-        ]
-      });
-    }
     super.initState();
   }
 
@@ -52,7 +37,7 @@ class _CoinRateCardsState extends State<CoinRateCards> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: KrackenWS.listenToCoinPrices(),
+        stream: KrakenWS.listenToCoinPrices(),
         builder: (context, snapshot) {
           List<dynamic> coinPayload = jsonDecode(snapshot.data.toString());
           if (coinPayload == null) {

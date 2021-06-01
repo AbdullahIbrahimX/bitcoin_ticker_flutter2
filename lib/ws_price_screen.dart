@@ -21,7 +21,7 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
   }
 
   void connectToWsServer() {
-    KrackenWS.subscribeToPairs(selectedCurrency, cryptoList);
+    KrakenWS.subscribeToPairs(selectedCurrency, cryptoList);
   }
 
   DropdownButton<String> androidDropdown() {
@@ -39,8 +39,8 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
         setState(() {
           selectedCurrency = value;
         });
-        KrackenWS.unsubscribeAll();
-        KrackenWS.subscribeAll(selectedCurrency, cryptoList);
+        KrakenWS.unsubscribeAll();
+        KrakenWS.subscribeAll(selectedCurrency, cryptoList);
       },
       value: selectedCurrency,
       items: currencyList,
