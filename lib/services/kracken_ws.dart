@@ -36,7 +36,7 @@ class KrackenWS {
           subscribeAll(currency, cryptoList);
         }
       }
-      print(message);
+      // print(message);
     });
   }
 
@@ -60,6 +60,15 @@ class KrackenWS {
     Stream coinData =
         _stream.where((event) => jsonDecode(event) is List<dynamic>);
     return coinData;
+  }
+
+  static Stream listenToCoinPrices2() async* {
+    Stream coinData =
+        _stream.where((event) => jsonDecode(event) is List<dynamic>);
+
+    await for (var coinPayload in coinData) {
+      print('FROM LISTEN TO COIN $coinPayload');
+    }
   }
 
   static closeConnection() async {
