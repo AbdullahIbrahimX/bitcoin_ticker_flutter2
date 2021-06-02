@@ -21,7 +21,7 @@ class KrakenWS {
   static String _uri = 'wss://ws.kraken.com';
   static List<String> _cryptoPairs = [];
   static var _codec = new JsonCodec().fuse(new Utf8Codec());
-  static Map _coinDisplayData = {};
+  static Map<String, List<dynamic>> _coinDisplayData = {};
 
   static subscribeToPairs(String currency, List<String> cryptoList) {
     _init();
@@ -38,7 +38,7 @@ class KrakenWS {
           subscribeAll(currency, cryptoList);
         }
       }
-      // print(message);
+      print(message);
     });
   }
 
@@ -64,7 +64,7 @@ class KrakenWS {
     return coinData;
   }
 
-  static Stream listenToCoinPrices2() async* {
+  static Stream<Map<String, List<dynamic>>> listenToCoinPrices2() async* {
     Stream stream =
         _stream.where((event) => jsonDecode(event) is List<dynamic>);
 
@@ -93,7 +93,6 @@ class KrakenWS {
         _compare(prevClosePrice, closePrice),
         _compare(closePrice, openPrice)
       ];
-      print(_coinDisplayData);
 
       yield _coinDisplayData;
     }

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 class CoinCard extends StatelessWidget {
   final String pairName;
-  final String pairPrice;
+  final double pairPrice;
   final String volume;
-  final String changeAmount;
+  final double changeAmount;
   final Color infoTextColor;
   //trending
-  final String OAchangePercentage;
+  final double OAchangePercentage;
   final Color OAbackGroundColor;
 
   CoinCard(
@@ -56,7 +56,7 @@ class CoinCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          pairPrice,
+                          pairPrice.toStringAsFixed(5),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 20.0,
@@ -77,7 +77,7 @@ class CoinCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          changeAmount,
+                          changeAmount.toStringAsFixed(5),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 20.0,
@@ -104,7 +104,7 @@ class CoinCard extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  OAchangePercentage,
+                  OAchangePercentage.toStringAsFixed(2),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,

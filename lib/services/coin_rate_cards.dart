@@ -10,23 +10,23 @@ class CoinRateCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: KrakenWS.listenToCoinPrices(),
+        stream: KrakenWS.listenToCoinPrices2(),
         builder: (context, snapshot) {
-          Map coinPayload = jsonDecode(snapshot.toString());
-          if (coinPayload == null) {
+          if (snapshot == null) {
             return LoadingScreen();
           }
+          Map<String, List<dynamic>> coinPayload = jsonDecode(snapshot.data);
 
           List<Widget> widgetList = [];
           coinPayload.forEach((key, value) {
             widgetList.add(
               CoinCard(
                 pairName: value[3],
-                pairPrice: value[0].toStringAsFixed(),
-                volume: value[1].toString(),
+                pairPrice: value[0],
+                volume: value[1],
                 changeAmount: value[4],
-                infoTextColor: compare(value[0], value[0]),
-                OAchangePercentage: '${value[5]}%',
+                infoTextColor: value[6],
+                OAchangePercentage: value[5],
                 OAbackGroundColor: value[7],
               ),
             );
@@ -38,35 +38,6 @@ class CoinRateCards extends StatelessWidget {
         });
   }
 }
-
-// class CoinCard extends StatelessWidget {
-//   final String cryptoName;
-//   final String rate;
-//
-//   const CoinCard({this.cryptoName, this.rate});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       color: Colors.lightBlueAccent,
-//       elevation: 5.0,
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(10.0),
-//       ),
-//       child: Padding(
-//         padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-//         child: Text(
-//           '1 $cryptoName = $rate',
-//           textAlign: TextAlign.center,
-//           style: TextStyle(
-//             fontSize: 20.0,
-//             color: Colors.white,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class LoadingScreen extends StatelessWidget {
   @override
