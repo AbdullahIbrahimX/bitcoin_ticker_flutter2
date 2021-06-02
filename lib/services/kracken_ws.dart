@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 
 const Map<String, Map> KrakenEvents = {
@@ -88,11 +89,23 @@ class KrakenWS {
         openPrice,
         pairName,
         changeAmount,
-        OAchangePercentage
+        OAchangePercentage,
+        _compare(prevClosePrice, closePrice),
+        _compare(closePrice, openPrice)
       ];
       print(_coinDisplayData);
 
       yield _coinDisplayData;
+    }
+  }
+
+  static Color _compare(double number1, double number2) {
+    if (number1 > number2) {
+      return Colors.green;
+    } else if (number1 < number2) {
+      return Colors.redAccent;
+    } else {
+      return Colors.white;
     }
   }
 
