@@ -26,7 +26,6 @@ class KrakenWS {
   static subscribeToPairs(String currency, List<String> cryptoList) {
     _init();
     //TODO add take(2);
-
     _stream.listen((event) {
       dynamic message = jsonDecode(event);
 
@@ -56,12 +55,11 @@ class KrakenWS {
         _codec.encode({...KrakenEvents['unsubscribe'], 'pair': _cryptoPairs});
     _channel.sink.add(unsubEvent);
     _cryptoPairs = [];
+    _coinDisplayData = {};
   }
 
-  static Stream listenToCoinPrices() {
-    Stream coinData =
-        _stream.where((event) => jsonDecode(event) is List<dynamic>);
-    return coinData;
+  static closeConnection() async {
+    _channel.sink.close();
   }
 
   static Stream<Map<String, List<dynamic>>> listenToCoinPrices2() async* {
@@ -91,7 +89,7 @@ class KrakenWS {
         changeAmount,
         OAchangePercentage,
         _compare(prevClosePrice, closePrice),
-        _compare(closePrice, openPrice)
+        _compare(openPrice, closePrice)
       ];
 
       yield _coinDisplayData;
@@ -106,10 +104,6 @@ class KrakenWS {
     } else {
       return Colors.white;
     }
-  }
-
-  static closeConnection() async {
-    _channel.sink.close();
   }
 
   static _init() {

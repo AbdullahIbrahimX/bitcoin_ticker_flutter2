@@ -1,26 +1,18 @@
-import 'dart:convert';
-
+import 'package:bitcoin_ticker_flutter2/CoinCard.dart';
 import 'package:bitcoin_ticker_flutter2/services/kracken_ws.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../CoinCard.dart';
-
 class CoinRateCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<Map<String, List<dynamic>>>(
         stream: KrakenWS.listenToCoinPrices2(),
         builder: (context, snapshot) {
-          if (snapshot == null) {
-            return LoadingScreen();
-          }
-          Map<String, List<dynamic>> coinPayload = jsonDecode(snapshot.data);
-
           List<Widget> widgetList = [];
-          coinPayload.forEach((key, value) {
-            widgetList.add(
-              CoinCard(
+          if (snapshot.data != null) {
+            snapshot.data.forEach((key, value) {
+              widgetList.add(CoinCard(
                 pairName: value[3],
                 pairPrice: value[0],
                 volume: value[1],
@@ -28,13 +20,16 @@ class CoinRateCards extends StatelessWidget {
                 infoTextColor: value[6],
                 OAchangePercentage: value[5],
                 OAbackGroundColor: value[7],
-              ),
+              ));
+            });
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: widgetList,
             );
-          });
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: widgetList,
-          );
+          } else {
+            return LoadingScreen();
+          }
         });
   }
 }

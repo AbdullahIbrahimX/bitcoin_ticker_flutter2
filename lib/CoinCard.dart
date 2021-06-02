@@ -104,7 +104,7 @@ class CoinCard extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  OAchangePercentage.toStringAsFixed(2),
+                  '${OAchangePercentage.toStringAsFixed(2)}%',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
