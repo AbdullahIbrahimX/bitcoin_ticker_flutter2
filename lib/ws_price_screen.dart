@@ -13,6 +13,7 @@ class WSPriceScreen extends StatefulWidget {
 
 class _WSPriceScreenState extends State<WSPriceScreen> {
   String selectedCurrency = "USD";
+  // List<String> cryptoList = ["XBT"];
 
   @override
   void initState() {
@@ -72,17 +73,10 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Center(
+          Expanded(
             child: Padding(
               padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  CoinRateCards(),
-                ],
-                // children: cryptoRates.isEmpty ? loadingScreen : coinRateCards(),
-                // children: loadingScreen,
-              ),
+              child: CoinRateCards(),
             ),
           ),
           Container(

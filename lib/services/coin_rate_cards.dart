@@ -27,10 +27,11 @@ class CoinRateCards extends StatelessWidget {
               }
             });
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: widgetList,
-            );
+            return ListView.builder(
+                itemCount: widgetList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return widgetList[index];
+                });
           } else {
             return LoadingScreen();
           }

@@ -109,8 +109,8 @@ class KrakenWS {
         pairName,
         changeAmount,
         OAchangePercentage,
-        _compare(prevClosePrice, closePrice),
-        _compare(openPrice, closePrice),
+        _compare(closePrice, prevClosePrice),
+        _compare(closePrice, openPrice),
         true
       ];
 
