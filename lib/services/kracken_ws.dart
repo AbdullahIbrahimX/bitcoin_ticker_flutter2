@@ -51,8 +51,15 @@ class KrakenWS {
   }
 
   static unsubscribeAll() {
+    List<String> unsubList = [];
+    _coinDisplayData.forEach((key, value) {
+      if (value.last) {
+        unsubList.add(key);
+      }
+    });
+
     List<int> unsubEvent =
-        _codec.encode({...KrakenEvents['unsubscribe'], 'pair': _cryptoPairs});
+        _codec.encode({...KrakenEvents['unsubscribe'], 'pair': unsubList});
     _channel.sink.add(unsubEvent);
     _cryptoPairs = [];
     _coinDisplayData.clear();
