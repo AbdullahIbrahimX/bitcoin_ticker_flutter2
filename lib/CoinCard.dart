@@ -119,3 +119,35 @@ class CoinCard extends StatelessWidget {
     );
   }
 }
+
+class ErrorCard extends StatelessWidget {
+  final String errorMessage;
+
+  const ErrorCard({this.errorMessage});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 70,
+      padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+      child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Expanded(
+          flex: 3,
+          child: Card(
+            margin: EdgeInsets.zero,
+            color: Colors.blueAccent,
+            elevation: 5.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  bottomLeft: Radius.circular(10.0)),
+            ),
+            child: Center(
+              child: Text(errorMessage),
+            ),
+          ),
+        )
+      ]),
+    );
+  }
+}

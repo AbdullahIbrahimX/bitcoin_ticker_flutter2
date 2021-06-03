@@ -55,14 +55,28 @@ class KrakenWS {
         _codec.encode({...KrakenEvents['unsubscribe'], 'pair': _cryptoPairs});
     _channel.sink.add(unsubEvent);
     _cryptoPairs = [];
-    _coinDisplayData = {};
+    _coinDisplayData.clear();
   }
 
   static closeConnection() async {
     _channel.sink.close();
   }
 
-  static Stream<Map<String, List<dynamic>>> listenToCoinPrices2() async* {
+  static listenToCoinErrors() async {
+    Stream stream = _stream.where((event) => jsonDecode(event) is! List);
+
+    await for (String errorPrePayload in stream) {
+      Map errorPayload = jsonDecode(errorPrePayload);
+      if (errorPayload['event'] == 'subscriptionStatus' &&
+          errorPayload['status'] == 'error') {
+        String pairName = errorPayload['pair'];
+        String errorMessage = errorPayload['errorMessage'];
+        _coinDisplayData[pairName] = [errorMessage, false];
+      }
+    }
+  }
+
+  static Stream<Map<String, List<dynamic>>> listenToCoinPrices() async* {
     Stream stream =
         _stream.where((event) => jsonDecode(event) is List<dynamic>);
 
@@ -89,7 +103,8 @@ class KrakenWS {
         changeAmount,
         OAchangePercentage,
         _compare(prevClosePrice, closePrice),
-        _compare(openPrice, closePrice)
+        _compare(openPrice, closePrice),
+        true
       ];
 
       yield _coinDisplayData;

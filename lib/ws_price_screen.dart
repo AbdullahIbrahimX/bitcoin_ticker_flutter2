@@ -22,6 +22,7 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
 
   void connectToWsServer() {
     KrakenWS.subscribeToPairs(selectedCurrency, cryptoList);
+    KrakenWS.listenToCoinErrors();
   }
 
   DropdownButton<String> androidDropdown() {

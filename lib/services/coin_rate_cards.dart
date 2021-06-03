@@ -7,20 +7,24 @@ class CoinRateCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Map<String, List<dynamic>>>(
-        stream: KrakenWS.listenToCoinPrices2(),
+        stream: KrakenWS.listenToCoinPrices(),
         builder: (context, snapshot) {
           List<Widget> widgetList = [];
           if (snapshot.data != null) {
             snapshot.data.forEach((key, value) {
-              widgetList.add(CoinCard(
-                pairName: value[3],
-                pairPrice: value[0],
-                volume: value[1],
-                changeAmount: value[4],
-                infoTextColor: value[6],
-                OAchangePercentage: value[5],
-                OAbackGroundColor: value[7],
-              ));
+              if (value.last) {
+                widgetList.add(CoinCard(
+                  pairName: value[3],
+                  pairPrice: value[0],
+                  volume: value[1],
+                  changeAmount: value[4],
+                  infoTextColor: value[6],
+                  OAchangePercentage: value[5],
+                  OAbackGroundColor: value[7],
+                ));
+              } else {
+                widgetList.add(ErrorCard(errorMessage: value[0]));
+              }
             });
 
             return Column(
