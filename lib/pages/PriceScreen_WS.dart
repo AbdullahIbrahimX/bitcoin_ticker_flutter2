@@ -44,8 +44,6 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
         cryptoList.add(element[DBHelper.columnCryptoName]);
       });
     });
-
-    print(cryptoList);
     return;
   }
 
@@ -81,7 +79,11 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
     return CupertinoPicker(
         itemExtent: 32.0,
         onSelectedItemChanged: (selectedItem) {
-          selectedCurrency = currenciesList[selectedItem];
+          setState(() {
+            selectedCurrency = currenciesList[selectedItem];
+          });
+          KrakenWS.unsubscribeAll();
+          KrakenWS.subscribeAll(selectedCurrency, cryptoList);
         },
         children: currencyList);
   }

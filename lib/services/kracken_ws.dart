@@ -25,8 +25,7 @@ class KrakenWS {
 
   static subscribeToPairs(String currency, List<String> cryptoList) {
     _init();
-    //TODO add take(2);
-    _stream.listen((event) {
+    _stream.take(2).listen((event) {
       dynamic message = jsonDecode(event);
 
       if (message != null &&
@@ -113,7 +112,6 @@ class KrakenWS {
         _compare(closePrice, openPrice),
         true
       ];
-      print(_coinDisplayData);
       yield _coinDisplayData;
     }
   }
