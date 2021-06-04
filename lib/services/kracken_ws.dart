@@ -113,7 +113,7 @@ class KrakenWS {
         _compare(closePrice, openPrice),
         true
       ];
-
+      print(_coinDisplayData);
       yield _coinDisplayData;
     }
   }
@@ -137,17 +137,3 @@ class KrakenWS {
     _stream = _channel.stream.asBroadcastStream();
   }
 }
-
-// _coinPrices.update(
-// cryptoName,
-// (value) => [
-// closePrice,
-// closeVolume,
-// openPrice,
-// pairName,
-// changeAmount.toStringAsFixed(5),
-// OAchangePercentage.toStringAsFixed(2),
-// compare(closePrice, _coinPrices[cryptoName][0]),
-// compare(OAchangePercentage.toString(),
-// _coinPrices[cryptoName][0])
-// ]);

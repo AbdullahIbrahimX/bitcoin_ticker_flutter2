@@ -9,14 +9,14 @@ const List<String> currenciesList = [
   'CHF',
 ];
 
-const List<String> cryptoList = [
-  'XBT',
-  'ETH',
-  'LTC',
-  'XRP',
-  'DASH',
-  'XMR',
-  'XLM',
-  'DOGE',
-  'LINK',
-];
+// const List<String> cryptoList = [
+//   'XBT',
+//   'ETH',
+//   'LTC',
+//   'XRP',
+//   'DASH',
+//   'XMR',
+//   'XLM',
+//   'DOGE',
+//   'LINK',
+// ];

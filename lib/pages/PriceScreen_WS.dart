@@ -1,6 +1,8 @@
 import 'dart:io' show Platform;
 
-import 'package:bitcoin_ticker_flutter2/services/coin_rate_cards.dart';
+import 'package:bitcoin_ticker_flutter2/components/CoinCardRate.dart';
+import 'package:bitcoin_ticker_flutter2/pages/AddNewCoin.dart';
+import 'package:bitcoin_ticker_flutter2/services/DBHelper.dart';
 import 'package:bitcoin_ticker_flutter2/services/constants.dart';
 import 'package:bitcoin_ticker_flutter2/services/kracken_ws.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,8 +14,9 @@ class WSPriceScreen extends StatefulWidget {
 }
 
 class _WSPriceScreenState extends State<WSPriceScreen> {
+  final dbHelper = DBHelper.instance;
   String selectedCurrency = "USD";
-  // List<String> cryptoList = ["XBT"];
+  List<String> cryptoList = [];
 
   @override
   void initState() {
@@ -21,9 +24,29 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
     super.initState();
   }
 
-  void connectToWsServer() {
+  addToCryptoList(List<String> newList) {
+    newList
+      ..forEach((element) {
+        cryptoList.add(element);
+      });
+  }
+
+  void connectToWsServer() async {
+    await getUserSavedCryptoList();
     KrakenWS.subscribeToPairs(selectedCurrency, cryptoList);
     KrakenWS.listenToCoinErrors();
+  }
+
+  Future<void> getUserSavedCryptoList() async {
+    List<Map<String, dynamic>> savedCryptoList = await dbHelper.queryAllRows();
+    savedCryptoList.forEach((element) {
+      setState(() {
+        cryptoList.add(element[DBHelper.columnCryptoName]);
+      });
+    });
+
+    print(cryptoList);
+    return;
   }
 
   DropdownButton<String> androidDropdown() {
@@ -68,6 +91,23 @@ class _WSPriceScreenState extends State<WSPriceScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('🤑 Coin Ticker'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Text(
+          '+',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 30.0,
+          ),
+        ),
+        backgroundColor: Colors.lightBlueAccent,
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddNewCoin(
+                      selectedCurrency, cryptoList, addToCryptoList)));
+        },
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

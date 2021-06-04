@@ -1,4 +1,4 @@
-import 'package:bitcoin_ticker_flutter2/ws_price_screen.dart';
+import 'package:bitcoin_ticker_flutter2/pages/PriceScreen_WS.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
